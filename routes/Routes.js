@@ -20,6 +20,11 @@ router.post('/createuser', async (req, res) => {
     const { username, phone_number, password } = req.body;
 
     try {
+        //Checking if customer has send phone number
+        if (!phone_number) {
+            return res.status(400).json({ message: `Please input phone number also` });
+        }
+
         // Check if user already exists
         const userExistsQuery = 'SELECT * FROM customer_info WHERE username = ? OR phone_number = ?';
         const [existingUser] = await con.promise().query(userExistsQuery, [username, phone_number]);
